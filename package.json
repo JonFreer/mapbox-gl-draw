@@ -10,7 +10,7 @@
   "homepage": "https://github.com/mapbox/mapbox-gl-draw",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mapbox/mapbox-gl-draw.git"
+    "url": "git://github.com/JonFreer/mapbox-gl-draw.git"
   },
   "bugs": {
     "url": "https://github.com/mapbox/mapbox-gl-draw/issues"
