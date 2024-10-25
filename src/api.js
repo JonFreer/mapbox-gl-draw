@@ -191,8 +191,47 @@ export default function(ctx, api) {
 
   api.setFeatureProperty = function(featureId, property, value) {
     ctx.store.setFeatureProperty(featureId, property, value);
+    ctx.store.render();
     return api;
   };
+
+  api.setSelected = function(featureIds) {
+    ctx.store.setSelected(featureIds);
+    ctx.store.render();
+    return api;
+  };
+
+  api.addSelected = function(featureIds) {
+    ctx.store.addSelected(featureIds);
+    ctx.store.render();
+    return api;
+  };
+
+  api.removeSelected = function(featureIds) {
+    ctx.store.removeSelected(featureIds);
+    ctx.store.render();
+    return api;
+  };
+
+  api.toggleSelected = function(featureIds) {
+    ctx.store.toggleSelected(featureIds);
+    ctx.store.render();
+    return api;
+  };
+  
+  api.removeFeatureProperty = function(featureId, property) {
+    ctx.store.removeFeatureProperty(featureId, property);
+    ctx.store.render();
+    return api;
+  };
+
+  api.toggleVisible = function(featureId) {
+    ctx.store.toggleVisible(featureId);
+    ctx.store.render();
+    return api;
+  };
+
+  
 
   return api;
 }

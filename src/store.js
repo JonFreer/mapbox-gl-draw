@@ -247,6 +247,65 @@ Store.prototype.setSelected = function(featureIds, options = {}) {
 };
 
 /**
+ * Sets the store's selection, clearing any prior values.
+ * If no feature ids are passed, the store is just cleared.
+ * @param {string | Array<string> | undefined} featureIds
+ * @param {Object} [options]
+ * @param {Object} [options.silent] - If `true`, this invocation will not fire an event.
+ * @return {Store} this
+ */
+Store.prototype.addSelected = function(featureIds, options = {}) {
+  featureIds = toDenseArray(featureIds);
+
+  // Select any features in the new selection that were not already selected
+  this.select(featureIds.filter(id => !this._selectedFeatureIds.has(id)), { silent: options.silent });
+
+  return this;
+};
+
+/**
+ * Sets the store's selection, clearing any prior values.
+ * If no feature ids are passed, the store is just cleared.
+ * @param {string | Array<string> | undefined} featureIds
+ * @param {Object} [options]
+ * @param {Object} [options.silent] - If `true`, this invocation will not fire an event.
+ * @return {Store} this
+ */
+Store.prototype.removeSelected = function(featureIds, options = {}) {
+  featureIds = toDenseArray(featureIds);
+
+  // Deselect any features in the new selection
+  this.deselect(this._selectedFeatureIds.values().filter(id => featureIds.indexOf(id) != -1), { silent: options.silent });
+
+  // Select any features in the new selection that were not already selected
+  // this.select(featureIds.filter(id => !this._selectedFeatureIds.has(id)), { silent: options.silent });
+
+  return this;
+};
+
+/**
+ * Toggle the store's selection, clearing any prior values.
+ * If no feature ids are passed, the store is just cleared.
+ * @param {string | Array<string> | undefined} featureIds
+ * @param {Object} [options]
+ * @param {Object} [options.silent] - If `true`, this invocation will not fire an event.
+ * @return {Store} this
+ */
+Store.prototype.toggleSelected = function(featureIds, options = {}) {
+  featureIds = toDenseArray(featureIds);
+  const featuresToDeselect = this._selectedFeatureIds.values().filter(id => featureIds.indexOf(id) != -1)
+  const featuresToSelect = featureIds.filter(id => !this._selectedFeatureIds.has(id))
+
+  // Deselect any features not in the new selection
+  this.deselect(featuresToDeselect, { silent: options.silent });
+
+  // Select any features in the new selection that were not already selected
+  this.select(featuresToSelect, { silent: options.silent });
+
+  return this;
+};
+
+/**
  * Sets the store's coordinates selection, clearing any prior values.
  * @param {Array<Array<string>>} coordinates
  * @return {Store} this
@@ -318,6 +377,17 @@ Store.prototype.setFeatureProperty = function(featureId, property, value) {
   this.featureChanged(featureId);
 };
 
+/**
+ * Removes a property on the given feature
+ * @param {string} featureId
+ * @param {string} property property
+*/
+Store.prototype.removeFeatureProperty = function(featureId, property) {
+  this.get(featureId).removeProperty(property);
+  this.featureChanged(featureId);
+};
+
+
 function refreshSelectedCoordinates(store, options) {
   const newSelectedCoordinates = store._selectedCoordinates.filter(point => store._selectedFeatureIds.has(point.feature_id));
   if (store._selectedCoordinates.length !== newSelectedCoordinates.length && !options.silent) {
@@ -366,4 +436,23 @@ Store.prototype.getInitialConfigValue = function(interaction) {
     // It seems to be true for all cases currently, so let's send back `true`.
     return true;
   }
+};
+
+
+/**
+ * Toggle the visibility of a feature
+ * @param {string} featureId
+*/
+Store.prototype.toggleVisible = function(featureId) {
+  const visibility = this.get(featureId).properties.visible;
+  if(visibility == "False"){
+    this.get(featureId).setProperty("visible", "True");
+  }else{
+    console.log("removing selected")
+    this.get(featureId).setProperty("visible", "False");
+    this.removeSelected(featureId); // remove selected
+  }
+
+  this.featureChanged(featureId);
+  this.isDirty = true; // to trigger if visible changes
 };

@@ -14,9 +14,9 @@ export default function render() {
   let newColdIds = [];
 
   if (store.isDirty) {
-    newColdIds = store.getAllIds();
+    newColdIds = store.getAllIds().filter(id => store.get(id).properties.visible != "False");
   } else {
-    newHotIds = store.getChangedIds().filter(id => store.get(id) !== undefined);
+    newHotIds = store.getChangedIds().filter(id => store.get(id) !== undefined).filter(id => store.get(id).properties.visible != "False");
     newColdIds = store.sources.hot.filter(geojson => geojson.properties.id && newHotIds.indexOf(geojson.properties.id) === -1 && store.get(geojson.properties.id) !== undefined).map(geojson => geojson.properties.id);
   }
 
@@ -37,6 +37,24 @@ export default function render() {
     store.ctx.events.currentModeRender(featureInternal, (geojson) => {
       geojson.properties.mode = mode;
       store.sources[source].push(geojson);
+    });
+  }
+
+  for(var i in store.sources.cold){
+    Object.keys(store.sources.cold[i].properties).forEach((key) => {
+        let value = store.sources.cold[i].properties[key];
+        if (!isNaN(Number(value))) {  // Check if value can be converted to a number
+          store.sources.cold[i].properties[key] = Number(value);  // Update value in place
+        }
+    });
+  }
+
+  for(var i in store.sources.hot){
+    Object.keys(store.sources.hot[i].properties).forEach((key) => {
+        let value = store.sources.hot[i].properties[key];
+        if (!isNaN(Number(value))) {  // Check if value can be converted to a number
+          store.sources.hot[i].properties[key] = Number(value);  // Update value in place
+        }
     });
   }
 

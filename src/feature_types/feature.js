@@ -30,6 +30,10 @@ Feature.prototype.setProperty = function(property, value) {
   this.properties[property] = value;
 };
 
+Feature.prototype.removeProperty = function(property) {
+  delete this.properties[property];
+};
+
 Feature.prototype.toGeoJSON = function() {
   return JSON.parse(JSON.stringify({
     id: this.id,
