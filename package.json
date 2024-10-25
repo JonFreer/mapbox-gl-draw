@@ -1,5 +1,5 @@
 {
-  "name": "mapbox-gl-draw",
+  "name": "@mapbox/mapbox-gl-draw",
   "version": "1.4.3",
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
