@@ -38,22 +38,30 @@ export default function render() {
       geojson.properties.mode = mode;
       store.sources[source].push(geojson);
     });
-  }
+  } 
 
-  for(var i in store.sources.cold){
-    Object.keys(store.sources.cold[i].properties).forEach((key) => {
-        let value = store.sources.cold[i].properties[key];
-        if (!isNaN(Number(value))) {  // Check if value can be converted to a number
-          store.sources.cold[i].properties[key] = Number(value);  // Update value in place
+  //need to clone before rendering
+
+  const cold_source = [...store.sources.cold]
+
+  for(var i in cold_source){
+    Object.keys(cold_source[i].properties).forEach((key) => {
+        if(key != "coord_path"){ // do not convert this value into a number
+          let value = cold_source[i].properties[key];
+          if (!isNaN(Number(value))) {  // Check if value can be converted to a number
+            cold_source[i].properties[key] = Number(value);  // Update value in place
+          }
         }
     });
   }
 
-  for(var i in store.sources.hot){
+  const hot_source = [...store.sources.hot]
+
+  for(var i in hot_source){
     Object.keys(store.sources.hot[i].properties).forEach((key) => {
-        let value = store.sources.hot[i].properties[key];
+        let value = hot_source[i].properties[key];
         if (!isNaN(Number(value))) {  // Check if value can be converted to a number
-          store.sources.hot[i].properties[key] = Number(value);  // Update value in place
+          hot_source[i].properties[key] = Number(value);  // Update value in place
         }
     });
   }
@@ -61,13 +69,13 @@ export default function render() {
   if (coldChanged) {
     store.ctx.map.getSource(Constants.sources.COLD).setData({
       type: Constants.geojsonTypes.FEATURE_COLLECTION,
-      features: store.sources.cold
+      features: cold_source
     });
   }
 
   store.ctx.map.getSource(Constants.sources.HOT).setData({
     type: Constants.geojsonTypes.FEATURE_COLLECTION,
-    features: store.sources.hot
+    features: hot_source
   });
 
   cleanup();
