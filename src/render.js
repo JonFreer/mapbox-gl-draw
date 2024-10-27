@@ -14,9 +14,9 @@ export default function render() {
   let newColdIds = [];
 
   if (store.isDirty) {
-    newColdIds = store.getAllIds().filter(id => store.get(id).properties.visible != "False");
+    newColdIds = store.getAllIds().filter(id => store.get(id).properties.visible != "False" && store.get(id).properties.locked != "True");
   } else {
-    newHotIds = store.getChangedIds().filter(id => store.get(id) !== undefined).filter(id => store.get(id).properties.visible != "False");
+    newHotIds = store.getChangedIds().filter(id => store.get(id) !== undefined).filter(id => store.get(id).properties.visible != "False" && store.get(id).properties.locked != "True");
     newColdIds = store.sources.hot.filter(geojson => geojson.properties.id && newHotIds.indexOf(geojson.properties.id) === -1 && store.get(geojson.properties.id) !== undefined).map(geojson => geojson.properties.id);
   }
 

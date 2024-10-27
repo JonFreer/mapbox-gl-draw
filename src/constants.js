@@ -55,6 +55,7 @@ export const modes = {
 };
 
 export const events = {
+  START_CREATE: 'draw.startcreate',
   CREATE: 'draw.create',
   DELETE: 'draw.delete',
   UPDATE: 'draw.update',

@@ -456,3 +456,21 @@ Store.prototype.toggleVisible = function(featureId) {
   this.featureChanged(featureId);
   this.isDirty = true; // to trigger if visible changes
 };
+
+/**
+ * Toggle the visibility of a feature
+ * @param {string} featureId
+*/
+Store.prototype.toggleLocked = function(featureId) {
+  const locked = this.get(featureId).properties.locked;
+  if(locked == "True"){
+    this.get(featureId).setProperty("locked", "False");
+  }else{
+    console.log("removing selected")
+    this.get(featureId).setProperty("locked", "True");
+    this.removeSelected(featureId); // remove selected
+  }
+
+  this.featureChanged(featureId);
+  this.isDirty = true; // to trigger if visible changes
+};

@@ -17,7 +17,7 @@ DrawPolygon.onSetup = function() {
   });
 
   this.addFeature(polygon);
-
+  this.fire(Constants.events.START_CREATE, polygon.toGeoJSON());
   this.clearSelectedFeatures();
   doubleClickZoom.disable(this);
   this.updateUIClasses({ mouse: Constants.cursors.ADD });

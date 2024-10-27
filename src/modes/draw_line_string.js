@@ -7,6 +7,7 @@ import createVertex from '../lib/create_vertex.js';
 const DrawLineString = {};
 
 DrawLineString.onSetup = function(opts) {
+  console.log("setup")
   opts = opts || {};
   const featureId = opts.featureId;
 
@@ -41,6 +42,7 @@ DrawLineString.onSetup = function(opts) {
       throw new Error('`from` should match the point at either the start or the end of the provided LineString');
     }
   } else {
+    console.log("new feature")
     line = this.newFeature({
       type: Constants.geojsonTypes.FEATURE,
       properties: {},
@@ -51,6 +53,7 @@ DrawLineString.onSetup = function(opts) {
     });
     currentVertexPosition = 0;
     this.addFeature(line);
+    this.fire(Constants.events.START_CREATE, line.toGeoJSON());
   }
 
   this.clearSelectedFeatures();

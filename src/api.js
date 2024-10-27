@@ -231,6 +231,13 @@ export default function(ctx, api) {
     return api;
   };
 
+  api.toggleLocked = function(featureId) {
+    ctx.store.toggleLocked(featureId);
+    ctx.store.render();
+    return api;
+  };
+
+
   
 
   return api;
