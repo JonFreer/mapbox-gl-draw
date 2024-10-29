@@ -72,6 +72,8 @@ export default function(ctx, api) {
     return newIds;
   };
 
+  
+
   api.add = function (geojson) {
     const featureCollection = JSON.parse(JSON.stringify(normalize(geojson)));
 
@@ -237,6 +239,9 @@ export default function(ctx, api) {
     return api;
   };
 
+  api.reorder = function(features) {
+    ctx.store.reorder(features);
+  };
 
   
 

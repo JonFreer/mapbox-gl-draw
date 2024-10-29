@@ -474,3 +474,21 @@ Store.prototype.toggleLocked = function(featureId) {
   this.featureChanged(featureId);
   this.isDirty = true; // to trigger if visible changes
 };
+
+/**
+ * Reorder the features based on a set of features
+ * @param {string} featureId
+*/
+Store.prototype.reorder = function(features) {
+  console.log("re-order C")
+  const ids = features.map(x=>x.id);
+  const order = ids.reduce((acc, key) => {
+    acc[key] = null;
+    return acc;
+  }, {});
+
+  this._features =  Object.assign(order,this._features)
+  this.isDirty = true;
+  this.render();
+
+}
