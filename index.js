@@ -19,6 +19,8 @@ const setupDraw = function(options, api) {
 
   api.onAdd = setup.onAdd;
   api.onRemove = setup.onRemove;
+  api.removeLayers = setup.removeLayers;
+  api.addLayers = setup.addLayers;
   api.types = Constants.types;
   api.options = options;
 
